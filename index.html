@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#171717">
+<title>ALKAR MİMARLIK | SURUÇLU KEBAP — 4K 360° Sanal Tur</title>
+<style>
+:root{color-scheme:dark;--accent:#e4bd87;--glass:rgba(16,17,18,.79);--line:rgba(255,255,255,.19)}
+*{box-sizing:border-box}html,body{margin:0;width:100%;height:100%;overflow:hidden;background:#101112;color:#f9f7f4;font-family:Inter,system-ui,-apple-system,'Segoe UI',Arial,sans-serif}
+#view{display:block;width:100%;height:100%;outline:none;touch-action:none;cursor:grab}#view:active{cursor:grabbing}
+#shade{position:fixed;inset:0;pointer-events:none;background:linear-gradient(180deg,rgba(0,0,0,.40),transparent 26%,transparent 66%,rgba(0,0,0,.55))}
+.brand{position:fixed;top:23px;left:27px;z-index:3;display:flex;align-items:center;gap:13px;pointer-events:none;text-shadow:0 2px 9px rgba(0,0,0,.8)}
+.brand-line{width:3px;height:43px;border-radius:5px;background:var(--accent);box-shadow:0 0 14px rgba(222,173,112,.25)}
+.brand h1{margin:0;font-size:19px;line-height:1.2;letter-spacing:2.3px;font-weight:760}
+.brand p{margin:5px 0 0;font-size:12px;letter-spacing:1.8px;color:#f3e2cd;font-weight:550}
+.topright{position:fixed;top:21px;right:23px;z-index:4;display:flex;gap:8px}
+.iconbtn{width:43px;height:43px;border:1px solid var(--line);border-radius:11px;background:var(--glass);color:#fff;display:grid;place-items:center;font-size:21px;cursor:pointer;backdrop-filter:blur(12px);transition:background .18s,border-color .18s}
+.iconbtn:hover,.iconbtn:focus-visible{background:rgba(93,68,44,.9);border-color:var(--accent);outline:none}
+.help{position:fixed;right:26px;top:76px;z-index:3;color:#fff;font-size:11px;letter-spacing:.1px;text-shadow:0 2px 8px #000;pointer-events:none;opacity:.88}
+#stage{position:fixed;bottom:122px;left:27px;z-index:3;pointer-events:none;text-shadow:0 2px 13px #000}
+#stage .overline{font-size:11px;letter-spacing:2.2px;font-weight:600;color:#ead0a9}
+#stage .name{font-size:25px;font-weight:700;line-height:1.2;margin-top:6px}
+.bottom{position:fixed;bottom:0;left:0;right:0;z-index:4;padding:27px 18px max(20px,env(safe-area-inset-bottom));background:linear-gradient(180deg,transparent,rgba(13,14,15,.92) 32%,rgba(13,14,15,.97));}
+.navigation{display:flex;align-items:center;justify-content:center;gap:11px;max-width:870px;margin:auto}
+.navbtn{border:1px solid var(--line);background:rgba(37,35,33,.85);color:#fff;padding:12px 17px;border-radius:10px;font-weight:650;cursor:pointer;font-size:13px;min-height:46px;white-space:nowrap;transition:filter .16s}
+.navbtn.primary{background:var(--accent);color:#251c12;border-color:#ffe0b2;min-width:142px;font-weight:780}
+.navbtn:hover:not(:disabled){filter:brightness(1.15)}.navbtn:disabled{opacity:.3;cursor:default}.navbtn.primary:disabled{opacity:.74;background:rgba(172,132,81,.52);border-color:rgba(228,189,135,.5);color:#fff}
+.steps{display:flex;align-items:center;justify-content:center;gap:7px;margin:0 7px}
+.step{min-width:90px;min-height:48px;border:1px solid rgba(255,255,255,.21);border-radius:10px;background:rgba(0,0,0,.35);color:#f1f1f1;padding:7px 12px;cursor:pointer;text-align:left;transition:background .15s,border-color .15s}
+.step .num{display:block;color:#c6b8a8;font-size:10px;margin-bottom:3px;letter-spacing:.8px}
+.step .label{display:block;font-size:12px;font-weight:680;white-space:nowrap}
+.step.active{background:rgba(129,89,44,.4);border-color:var(--accent)}.step.active .num{color:#ffdfa7}
+.signature{position:fixed;left:18px;bottom:14px;z-index:5;pointer-events:none;font:italic 10px/1.2 Georgia,'Times New Roman',serif;letter-spacing:.25px;color:rgba(255,255,255,.65);padding:5px 8px;border-left:1px solid rgba(228,189,135,.6);background:rgba(0,0,0,.15)}
+#loading{position:fixed;inset:0;background:#171717;z-index:7;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:17px;text-align:center;transition:opacity .28s}
+#loading.hide{opacity:0;pointer-events:none}#loading .spinner{width:36px;height:36px;border:3px solid #44403b;border-top-color:var(--accent);border-radius:50%;animation:spin .8s linear infinite}@keyframes spin{to{transform:rotate(360deg)}}
+#loading span{font-size:14px;color:#e7d5bc}
+#error{display:none;position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);z-index:10;max-width:430px;width:calc(100% - 40px);padding:23px;background:#24201d;border:1px solid #bb795f;border-radius:14px;text-align:center;line-height:1.6}
+@media(max-width:920px){.signature{bottom:91px}.step{min-width:72px;padding:7px 10px}.navbtn.primary{min-width:113px}.navigation{gap:7px}}
+@media(max-width:660px){.brand{left:14px;top:13px;gap:9px}.brand-line{height:36px}.brand h1{font-size:14px;letter-spacing:1.25px}.brand p{font-size:10px;letter-spacing:1.2px}.topright{right:10px;top:12px;gap:5px}.iconbtn{width:35px;height:35px;border-radius:8px;font-size:19px}.help{display:none}#stage{left:14px;bottom:116px}#stage .name{font-size:20px}.bottom{padding:23px 8px max(15px,env(safe-area-inset-bottom))}.navigation{gap:4px}.steps{gap:3px;margin:0 2px}.step{min-width:34px;padding:7px 7px;text-align:center;min-height:42px}.step .num{margin:0;font-size:12px}.step .label{display:none}.navbtn{padding:9px 9px;min-height:42px;font-size:12px}.navbtn.primary{min-width:86px}.signature{bottom:82px;left:11px;font-size:9px}}
+@media(max-width:375px){.brand h1{font-size:12px}.brand p{font-size:9px}.iconbtn{width:31px;height:31px}.navbtn{font-size:11px;padding:8px}.navbtn.primary{min-width:75px}}
+</style>
+</head>
+<body>
+<canvas id="view" aria-label="360 derece sanal tur. Fareyle veya parmağınızla çevirebilirsiniz." tabindex="0"></canvas>
+<div id="shade"></div>
+<header class="brand"><div class="brand-line"></div><div><h1>ALKAR MİMARLIK</h1><p>SURUÇLU KEBAP</p></div></header>
+<div class="topright">
+ <button class="iconbtn" id="zoomIn" title="Yakınlaştır" aria-label="Yakınlaştır">+</button>
+ <button class="iconbtn" id="zoomOut" title="Uzaklaştır" aria-label="Uzaklaştır">−</button>
+ <button class="iconbtn" id="reset" title="Görünümü sıfırla" aria-label="Görünümü sıfırla">↺</button>
+ <button class="iconbtn" id="fullscreen" title="Tam ekran" aria-label="Tam ekran">⛶</button>
+</div>
+<div class="help">Sürükle: etrafına bak · Kaydır: yakınlaştır</div>
+<div id="stage"><div class="overline" id="floor">ALT KAT · 1 / 4</div><div class="name" id="name">Giriş ve Merdiven</div></div>
+<nav class="bottom" aria-label="Sanal tur noktaları"><div class="navigation">
+ <button class="navbtn" id="prev" title="Önceki bölüme geç">← Geri</button>
+ <div class="steps" id="steps"></div>
+ <button class="navbtn primary" id="next" title="Sonraki bölüme geç">İleri →</button>
+</div></nav>
+<div class="signature">by Mert İlker Birkent</div>
+<div id="loading"><div class="spinner"></div><span id="loadingText">4K panorama hazırlanıyor…</span></div>
+<div id="error" role="alert"></div>
+<script>
+(function(){
+'use strict';
+const scenes=[{"name":"Giriş ve Merdiven","short":"Giriş","floor":"ALT KAT","file":"pano_01.webp"},{"name":"Mangal ve servis","short":"Mangal","floor":"ALT KAT","file":"pano_02.webp"},{"name":"Üst Kat Girişi","short":"Üst","floor":"ÜST KAT","file":"pano_03.webp"},{"name":"Üst kat arka alan","short":"Arka","floor":"ÜST KAT","file":"pano_04.webp"}];
+async function unpackScene(sceneIndex){return scenes[sceneIndex].file;}
+function loadSceneImage(sceneIndex,valid,onReady){
+ unpackScene(sceneIndex).then(url=>{
+  if(!valid()){return;}
+  const img=new Image();
+  img.onload=()=>{try{if(valid())onReady(img);}catch(e){if(valid())fail('Görüntü işlenemedi: '+e.message);}finally{}};
+  img.onerror=()=>{if(valid())fail('Panorama görüntüsü açılamadı.');};
+  img.src=url;
+ }).catch(e=>{if(valid())fail('Panorama açılamadı: '+e.message);});
+}
+
+const canvas=document.getElementById('view');
+window.__tourInfo={sceneCount:scenes.length,sourceResolution:'4096×2048',quality:'4K lossless WebP, pixel-identical to original PNG'};
+const gl=canvas.getContext('webgl',{alpha:false,antialias:true,preserveDrawingBuffer:false})||canvas.getContext('experimental-webgl');
+const error=document.getElementById('error');
+const loading=document.getElementById('loading');
+const loadingText=document.getElementById('loadingText');
+const clamp=(v,a,b)=>Math.max(a,Math.min(b,v));
+function fail(msg){loading.classList.add('hide');error.textContent=msg;error.style.display='block';}
+if(!gl){cpuFallback();return;}
+function cpuFallback(){
+ const ctx=canvas.getContext('2d',{alpha:false});if(!ctx){fail('360° görüntüleyici başlatılamadı.');return;}
+ let index=0,yaw=0,pitch=0,fov=74,source=null,sw=0,sh=0,seq=0,pending=false,fast=false;
+ const steps=document.getElementById('steps');
+ scenes.forEach((s,i)=>{let b=document.createElement('button');b.className='step';b.innerHTML='<span class="num">'+(i+1)+'</span><span class="label">'+s.short+'</span>';b.title=s.name;b.onclick=()=>change(i);steps.appendChild(b);});
+ function sync(){let s=scenes[index];document.getElementById('name').textContent=s.name;document.getElementById('floor').textContent=s.floor+' · '+(index+1)+' / '+scenes.length;
+ document.getElementById('prev').disabled=index===0;document.getElementById('next').disabled=index===scenes.length-1;
+ document.getElementById('next').textContent=index===scenes.length-1?'Tur tamamlandı ✓':'İleri →';
+ [...steps.children].forEach((el,i)=>{el.classList.toggle('active',i===index);el.setAttribute('aria-current',i===index?'step':'false');});}
+ function render(){pending=false;if(!source)return;
+ const dpr=Math.min(window.devicePixelRatio||1,1.5);
+ const scale=fast?0.48:1;
+ const w=Math.max(1,Math.min(1800,Math.round(canvas.clientWidth*dpr*scale)));
+ const h=Math.max(1,Math.min(1100,Math.round(canvas.clientHeight*dpr*scale)));
+ if(canvas.width!==w||canvas.height!==h){canvas.width=w;canvas.height=h;}
+ const frame=ctx.createImageData(w,h),dst=frame.data,src=source;
+ const tan=Math.tan(fov*Math.PI/360),aspect=w/h;
+ const cy=Math.cos(yaw),sy=Math.sin(yaw),cp=Math.cos(pitch),sp=Math.sin(pitch),twoPi=2*Math.PI,pi=Math.PI;
+ const dxs=new Float64Array(w);for(let x=0;x<w;x++)dxs[x]=((x+.5)*2/w-1)*aspect*tan;
+ let di=0;
+ for(let y=0;y<h;y++){
+  const dy=(1-(y+.5)*2/h)*tan;
+  for(let x=0;x<w;x++){
+   const dx=dxs[x],inv=1/Math.sqrt(dx*dx+dy*dy+1);
+   const wx=(dx*cy-dy*sp*sy+sy*cp)*inv;
+   const wy=(dy*cp+sp)*inv;
+   const wz=(-dx*sy-dy*sp*cy+cy*cp)*inv;
+   const sx=((Math.atan2(wx,wz)/twoPi+1.5)%1)*sw;
+   const ty=clamp((.5-Math.asin(clamp(wy,-1,1))/pi)*sh,0,sh-1);
+   const x0=Math.floor(sx),x1=(x0+1)%sw,y0=Math.floor(ty),y1=Math.min(sh-1,y0+1);
+   const ax=sx-x0,ay=ty-y0;
+   const a=(y0*sw+x0)*4,b=(y0*sw+x1)*4,c=(y1*sw+x0)*4,d=(y1*sw+x1)*4;
+   const w00=(1-ax)*(1-ay),w10=ax*(1-ay),w01=(1-ax)*ay,w11=ax*ay;
+   dst[di]=src[a]*w00+src[b]*w10+src[c]*w01+src[d]*w11;
+   dst[di+1]=src[a+1]*w00+src[b+1]*w10+src[c+1]*w01+src[d+1]*w11;
+   dst[di+2]=src[a+2]*w00+src[b+2]*w10+src[c+2]*w01+src[d+2]*w11;
+   dst[di+3]=255;di+=4;
+  }
+ }
+ ctx.putImageData(frame,0,0);
+ }
+ function schedule(quick=false){fast=quick;if(pending)return;pending=true;requestAnimationFrame(render);}
+ function change(next){if(next<0||next>=scenes.length||next===index&&source)return;
+  index=next;sync();source=null;const id=++seq;loadingText.textContent=scenes[index].name+' yükleniyor…';loading.classList.remove('hide');
+  loadSceneImage(index,()=>id===seq,img=>{
+   sw=img.naturalWidth;sh=img.naturalHeight;
+   const off=document.createElement('canvas');off.width=sw;off.height=sh;
+   const oc=off.getContext('2d',{willReadFrequently:true});oc.drawImage(img,0,0);
+   source=oc.getImageData(0,0,sw,sh).data;
+   yaw=0;pitch=0;fov=74;fast=false;schedule(false);loading.classList.add('hide');
+  });
+ }
+ const pointers=new Map();let prevPinch=null;
+ function zoom(delta){fov=clamp(fov+delta,32,105);schedule(false);}
+ canvas.addEventListener('pointerdown',e=>{canvas.setPointerCapture(e.pointerId);pointers.set(e.pointerId,{x:e.clientX,y:e.clientY});prevPinch=null;});
+ canvas.addEventListener('pointermove',e=>{if(!pointers.has(e.pointerId))return;const old=pointers.get(e.pointerId);pointers.set(e.pointerId,{x:e.clientX,y:e.clientY});
+  if(pointers.size===1){const speed=(fov*Math.PI/180)/Math.max(1,canvas.clientHeight);yaw-=(e.clientX-old.x)*speed;pitch=clamp(pitch+(e.clientY-old.y)*speed,-1.54,1.54);schedule(true);}
+  else if(pointers.size===2){const p=[...pointers.values()],d=Math.hypot(p[0].x-p[1].x,p[0].y-p[1].y);if(prevPinch!==null)zoom((prevPinch-d)*.07);prevPinch=d;}});
+ function end(e){pointers.delete(e.pointerId);prevPinch=null;schedule(false);}
+ canvas.addEventListener('pointerup',end);canvas.addEventListener('pointercancel',end);
+ canvas.addEventListener('wheel',e=>{e.preventDefault();zoom(Math.sign(e.deltaY)*4);},{passive:false});
+ canvas.addEventListener('dblclick',()=>{yaw=0;pitch=0;fov=74;schedule(false);});
+ document.getElementById('prev').onclick=()=>change(index-1);document.getElementById('next').onclick=()=>change(index+1);
+ document.getElementById('zoomIn').onclick=()=>zoom(-7);document.getElementById('zoomOut').onclick=()=>zoom(7);
+ document.getElementById('reset').onclick=()=>{yaw=0;pitch=0;fov=74;schedule(false);};
+ document.getElementById('fullscreen').onclick=()=>{if(document.fullscreenElement)document.exitFullscreen();else document.documentElement.requestFullscreen?.();};
+ document.addEventListener('keydown',e=>{if(e.key==='ArrowLeft')yaw-=.12;else if(e.key==='ArrowRight')yaw+=.12;else if(e.key==='ArrowUp')pitch=clamp(pitch+.10,-1.54,1.54);else if(e.key==='ArrowDown')pitch=clamp(pitch-.10,-1.54,1.54);else if(e.key==='+'||e.key==='='){zoom(-5);return;}else if(e.key==='-'){zoom(5);return;}else if(e.key==='PageDown'){change(index+1);return;}else if(e.key==='PageUp'){change(index-1);return;}else return;schedule(false);e.preventDefault();});
+ window.addEventListener('resize',()=>schedule(false));
+ change(0);
+}
+const vertex=`attribute vec2 aPos;varying vec2 vScreen;void main(){vScreen=aPos;gl_Position=vec4(aPos,0.0,1.0);}`;
+// 4K panoramalar kayıpsız WebP ile saklanır; orijinal PNG pikselleri korunur.
+// WebGL'de görüntünün ilk satırı altta depolandığından, üst yarımküre için v=0 kullanılır.
+const fragment=`precision highp float;
+varying vec2 vScreen;
+uniform sampler2D uPanorama;
+uniform float uAspect,uTanHalfFov,uYaw,uPitch;
+const float PI=3.141592653589793;
+void main(){
+ vec3 ray=normalize(vec3(vScreen.x*uAspect*uTanHalfFov,vScreen.y*uTanHalfFov,1.0));
+ vec3 forward=vec3(sin(uYaw)*cos(uPitch),sin(uPitch),cos(uYaw)*cos(uPitch));
+ vec3 right=vec3(cos(uYaw),0.0,-sin(uYaw));
+ vec3 up=normalize(cross(forward,right));
+ vec3 direction=normalize(ray.x*right+ray.y*up+ray.z*forward);
+ float longitude=atan(direction.x,direction.z);
+ float latitude=asin(clamp(direction.y,-1.0,1.0));
+ vec2 uv=vec2(fract(longitude/(2.0*PI)+0.5),0.5-latitude/PI);
+ gl_FragColor=texture2D(uPanorama,uv);
+}`;
+function compile(type,src){let s=gl.createShader(type);gl.shaderSource(s,src);gl.compileShader(s);if(!gl.getShaderParameter(s,gl.COMPILE_STATUS))throw new Error(gl.getShaderInfoLog(s));return s;}
+let prog;
+try{prog=gl.createProgram();gl.attachShader(prog,compile(gl.VERTEX_SHADER,vertex));gl.attachShader(prog,compile(gl.FRAGMENT_SHADER,fragment));gl.linkProgram(prog);if(!gl.getProgramParameter(prog,gl.LINK_STATUS))throw new Error(gl.getProgramInfoLog(prog));}
+catch(e){fail('360° görüntüleyici başlatılamadı: '+e.message);return;}
+gl.useProgram(prog);
+const buf=gl.createBuffer();gl.bindBuffer(gl.ARRAY_BUFFER,buf);gl.bufferData(gl.ARRAY_BUFFER,new Float32Array([-1,-1,1,-1,-1,1,-1,1,1,-1,1,1]),gl.STATIC_DRAW);
+const attrib=gl.getAttribLocation(prog,'aPos');gl.enableVertexAttribArray(attrib);gl.vertexAttribPointer(attrib,2,gl.FLOAT,false,0,0);
+const uAspect=gl.getUniformLocation(prog,'uAspect'),uFov=gl.getUniformLocation(prog,'uTanHalfFov'),uYaw=gl.getUniformLocation(prog,'uYaw'),uPitch=gl.getUniformLocation(prog,'uPitch'),uPano=gl.getUniformLocation(prog,'uPanorama');
+const tex=gl.createTexture();gl.activeTexture(gl.TEXTURE0);gl.bindTexture(gl.TEXTURE_2D,tex);
+gl.texParameteri(gl.TEXTURE_2D,gl.TEXTURE_WRAP_S,gl.REPEAT);
+gl.texParameteri(gl.TEXTURE_2D,gl.TEXTURE_WRAP_T,gl.CLAMP_TO_EDGE);
+gl.texParameteri(gl.TEXTURE_2D,gl.TEXTURE_MIN_FILTER,gl.LINEAR);
+gl.texParameteri(gl.TEXTURE_2D,gl.TEXTURE_MAG_FILTER,gl.LINEAR);
+gl.uniform1i(uPano,0);
+let index=0,yaw=0,pitch=0,fov=74,loaded=false,requestId=0;
+const steps=document.getElementById('steps');
+scenes.forEach((s,i)=>{let b=document.createElement('button');b.className='step';b.innerHTML='<span class="num">'+(i+1)+'</span><span class="label">'+s.short+'</span>';b.title=s.name;b.setAttribute('aria-label',s.name);b.onclick=()=>change(i);steps.appendChild(b);});
+function sync(){const s=scenes[index];document.getElementById('name').textContent=s.name;document.getElementById('floor').textContent=s.floor+' · '+(index+1)+' / '+scenes.length;
+ document.getElementById('prev').disabled=index===0;document.getElementById('next').disabled=index===scenes.length-1;
+ document.getElementById('next').textContent=index===scenes.length-1?'Tur tamamlandı ✓':'İleri →';
+ [...steps.children].forEach((el,i)=>{el.classList.toggle('active',i===index);el.setAttribute('aria-current',i===index?'step':'false');});}
+function render(){if(!loaded)return;const dpr=Math.min(window.devicePixelRatio||1,2);
+ const w=Math.max(1,Math.round(canvas.clientWidth*dpr)),h=Math.max(1,Math.round(canvas.clientHeight*dpr));
+ if(canvas.width!==w||canvas.height!==h){canvas.width=w;canvas.height=h;gl.viewport(0,0,w,h);}
+ gl.uniform1f(uAspect,w/h);gl.uniform1f(uFov,Math.tan(fov*Math.PI/360));gl.uniform1f(uYaw,yaw);gl.uniform1f(uPitch,pitch);
+ gl.drawArrays(gl.TRIANGLES,0,6);
+}
+function change(next){if(next<0||next>=scenes.length||next===index&&loaded)return;
+ index=next;sync();loaded=false;requestId++;const id=requestId;
+ loadingText.textContent=scenes[index].name+' yükleniyor…';loading.classList.remove('hide');
+ loadSceneImage(index,()=>id===requestId,img=>{
+  if(img.width>gl.getParameter(gl.MAX_TEXTURE_SIZE)||img.height>gl.getParameter(gl.MAX_TEXTURE_SIZE))throw Error('Panorama bu cihazın desteklediği doku boyutundan büyük');
+  gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL,false);gl.bindTexture(gl.TEXTURE_2D,tex);gl.texImage2D(gl.TEXTURE_2D,0,gl.RGBA,gl.RGBA,gl.UNSIGNED_BYTE,img);
+  yaw=0;pitch=0;fov=74;loaded=true;render();loading.classList.add('hide');
+ });
+}
+const pointers=new Map();let prevPinch=null;
+function zoom(delta){fov=clamp(fov+delta,32,105);render();}
+canvas.addEventListener('pointerdown',e=>{canvas.setPointerCapture(e.pointerId);pointers.set(e.pointerId,{x:e.clientX,y:e.clientY});prevPinch=null;});
+canvas.addEventListener('pointermove',e=>{if(!pointers.has(e.pointerId))return;const old=pointers.get(e.pointerId);pointers.set(e.pointerId,{x:e.clientX,y:e.clientY});
+ if(pointers.size===1){const speed=(fov*Math.PI/180)/Math.max(1,canvas.clientHeight);yaw-=(e.clientX-old.x)*speed;pitch=clamp(pitch+(e.clientY-old.y)*speed,-1.54,1.54);render();}
+ else if(pointers.size===2){const p=[...pointers.values()];const d=Math.hypot(p[0].x-p[1].x,p[0].y-p[1].y);if(prevPinch!==null)zoom((prevPinch-d)*.07);prevPinch=d;}});
+function end(e){pointers.delete(e.pointerId);prevPinch=null;}
+canvas.addEventListener('pointerup',end);canvas.addEventListener('pointercancel',end);
+canvas.addEventListener('wheel',e=>{e.preventDefault();zoom(Math.sign(e.deltaY)*4);},{passive:false});
+canvas.addEventListener('dblclick',()=>{yaw=0;pitch=0;fov=74;render();});
+document.getElementById('prev').onclick=()=>change(index-1);document.getElementById('next').onclick=()=>change(index+1);
+document.getElementById('zoomIn').onclick=()=>zoom(-7);document.getElementById('zoomOut').onclick=()=>zoom(7);
+document.getElementById('reset').onclick=()=>{yaw=0;pitch=0;fov=74;render();};
+document.getElementById('fullscreen').onclick=()=>{if(document.fullscreenElement)document.exitFullscreen();else document.documentElement.requestFullscreen?.();};
+document.addEventListener('keydown',e=>{if(['INPUT','TEXTAREA'].includes(document.activeElement?.tagName))return;
+ if(e.key==='ArrowLeft'){yaw-=.12;}else if(e.key==='ArrowRight'){yaw+=.12;}else if(e.key==='ArrowUp'){pitch=clamp(pitch+.10,-1.54,1.54);}else if(e.key==='ArrowDown'){pitch=clamp(pitch-.10,-1.54,1.54);}
+ else if(e.key==='+'||e.key==='='){zoom(-5);return;}else if(e.key==='-'){zoom(5);return;}else if(e.key==='PageDown'){change(index+1);return;}else if(e.key==='PageUp'){change(index-1);return;}else{return;}render();e.preventDefault();});
+window.addEventListener('resize',render);
+change(0);
+})();
+</script>
+</body></html>
